@@ -1,0 +1,52 @@
+// Fase 2 — Modelos de negocio (roles, usuarios, análisis)
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  FIELD
+  REVIEWER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  role         Role
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  createdById  String?
+  createdBy    User?    @relation("UserCreatedBy", fields: [createdById], references: [id])
+  createdUsers User[]   @relation("UserCreatedBy")
+  analyses     Analysis[]
+}
+
+model Analysis {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  city          String
+  address       String
+  fieldNotes    String?
+  imageBase64   String   @db.Text
+  imageMime     String
+  imageWidth    Int
+  imageHeight   Int
+  provider      String
+  model         String
+  resultJson    Json?
+  errorMessage  String?  @db.Text
+  promptVersion String?
+
+  @@index([userId])
+  @@index([createdAt])
+}

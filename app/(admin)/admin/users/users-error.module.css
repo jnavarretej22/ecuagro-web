@@ -1,0 +1,39 @@
+.wrap {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 1.5rem 0;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #9a3412;
+  margin-bottom: 0.75rem;
+}
+
+.text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: #5c5f55;
+  margin-bottom: 0.75rem;
+}
+
+.text code {
+  font-size: 13px;
+  background: #f4f4f0;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e5c35;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

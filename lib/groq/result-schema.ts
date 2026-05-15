@@ -1,0 +1,68 @@
+import { z } from "zod";
+
+const hallazgoSchema = z
+  .object({
+    nombre: z.string(),
+    nombreCientifico: z.union([z.string(), z.null()]).optional(),
+    severidad: z.string(),
+    confianza: z.string(),
+    descripcion: z.string(),
+  })
+  .passthrough();
+
+const pilarSchema = z
+  .object({
+    hallazgos: z.array(hallazgoSchema).default([]),
+    sinHallazgos: z.boolean(),
+    nota: z.string().optional().default(""),
+  })
+  .passthrough();
+
+/** Contrato mínimo del JSON de diagnóstico (validación tolerante a campos extra). */
+export const diagnosticoResultSchema = z
+  .object({
+    modelo: z.string(),
+    confianza: z.number().min(0).max(100),
+    diagnosticoPrincipal: z.string(),
+    severidad: z.string(),
+    pilares: z.object({
+      follaje: pilarSchema,
+      plagas: pilarSchema,
+      nutricion: pilarSchema,
+    }),
+    diagnosticoIntegrado: z.string(),
+    accionUrgente: z.union([z.string(), z.null()]).optional(),
+    planAccion: z.array(
+      z
+        .object({
+          prioridad: z.string(),
+          titulo: z.string(),
+          detalle: z.string(),
+          plazo: z.string(),
+        })
+        .passthrough(),
+    ),
+    disclaimer: z.string(),
+  })
+  .passthrough();
+
+export type DiagnosticoResult = z.infer<typeof diagnosticoResultSchema>;
+
+export function parseDiagnosticoJson(
+  raw: unknown,
+):
+  | { ok: true; data: DiagnosticoResult }
+  | { ok: false; errorMessage: string } {
+  const parsed = diagnosticoResultSchema.safeParse(raw);
+  if (!parsed.success) {
+    const msg = parsed.error.issues
+      .map((i) => `${i.path.join(".") || "(raíz)"}: ${i.message}`)
+      .slice(0, 8)
+      .join("; ");
+    return {
+      ok: false,
+      errorMessage: `JSON del modelo no cumple el esquema: ${msg}`,
+    };
+  }
+  return { ok: true, data: parsed.data };
+}

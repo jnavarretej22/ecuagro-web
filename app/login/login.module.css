@@ -1,0 +1,340 @@
+/* ─── Login page ─────────────────────────────────────────────────────── */
+.page {
+  display: flex;
+  min-height: 100vh;
+  background: var(--cream);
+}
+
+/* ── Panel izquierdo: fondo verde + decoración ─────────────────────────── */
+.visual {
+  display: none;
+  flex: 1;
+  background: linear-gradient(135deg, var(--green-700) 0%, var(--green-800) 100%);
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 48px 40px;
+  color: white;
+}
+
+@media (min-width: 780px) {
+  .visual { display: flex; }
+}
+
+.visualGlow {
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(93,202,165,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.visualGlow2 {
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(201,162,39,0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.visualContent {
+  position: relative;
+  z-index: 1;
+  max-width: 340px;
+  width: 100%;
+}
+
+.visualIcon {
+  width: 64px;
+  height: 64px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.visualEyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green-400);
+  margin-bottom: 12px;
+}
+
+.visualTitle {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.visualTitle em {
+  font-style: italic;
+  color: var(--green-400);
+}
+
+.visualDesc {
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.visualFeats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.visualFeat {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 12px 10px;
+  text-align: center;
+}
+
+.visualFeatNum {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--green-400);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.visualFeatLabel {
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.3;
+}
+
+/* ── Panel derecho: formulario ─────────────────────────────────────────── */
+.formSide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 40px 24px;
+  min-height: 100vh;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--paper);
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+  padding: 44px 36px;
+  animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* Logo mobile (solo visible en móvil) */
+.logoMobile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  justify-content: center;
+}
+
+@media (min-width: 780px) {
+  .logoMobile { display: none; }
+}
+
+.logoMobileIcon {
+  width: 36px;
+  height: 36px;
+  background: var(--green-700);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoMobileText {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.4px;
+}
+
+.logoMobileText em {
+  font-style: italic;
+  color: var(--green-700);
+}
+
+/* Eyebrow */
+.kicker {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--green-700);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kicker::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--green-500);
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.6px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.hint {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-3);
+  margin-bottom: 28px;
+}
+
+/* Formulario */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.input {
+  padding: 13px 15px;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  font-size: 15px;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--cream);
+  transition: all 0.2s;
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--green-500);
+  background: var(--paper);
+  box-shadow: 0 0 0 4px rgba(29,158,117,0.1);
+}
+
+.error {
+  font-size: 13px;
+  color: var(--red);
+  background: var(--red-lt);
+  border: 1px solid rgba(192,57,43,0.2);
+  padding: 11px 14px;
+  border-radius: 12px;
+  line-height: 1.45;
+}
+
+.errorHint {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-3);
+  margin-top: -8px;
+  padding: 0 2px;
+}
+
+.submit {
+  margin-top: 4px;
+  width: 100%;
+  padding: 15px 20px;
+  background: var(--green-700);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: -0.2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(15,110,86,0.25);
+}
+
+.submit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent 50%);
+  pointer-events: none;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--green-800);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(15,110,86,0.35);
+}
+
+.submit:active { transform: translateY(0); }
+
+.submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.footer {
+  margin-top: 22px;
+  font-size: 13px;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+.footer a {
+  color: var(--green-700);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 32px 22px;
+    border-radius: 20px;
+  }
+}
