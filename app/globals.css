@@ -43,10 +43,29 @@
   --line:   #e8e6dc;
   --line-2: #d8d6cb;
 
-  /* Sombras */
-  --shadow-sm: 0 1px 2px rgba(20,30,15,0.04), 0 1px 3px rgba(20,30,15,0.06);
-  --shadow-md: 0 4px 8px rgba(20,30,15,0.04), 0 8px 24px rgba(20,30,15,0.06);
-  --shadow-lg: 0 12px 24px rgba(20,30,15,0.06), 0 20px 60px rgba(20,30,15,0.08);
+  /* Sombras base */
+  --shadow-sm:    0 1px 2px rgba(20,30,15,0.04), 0 1px 3px rgba(20,30,15,0.06);
+  --shadow-md:    0 4px 8px rgba(20,30,15,0.04), 0 8px 24px rgba(20,30,15,0.06);
+  --shadow-lg:    0 12px 24px rgba(20,30,15,0.06), 0 20px 60px rgba(20,30,15,0.08);
+
+  /* Sombras con tinte de color */
+  --shadow-card:  0 2px 8px rgba(20,30,15,0.05), 0 8px 28px rgba(20,30,15,0.07);
+  --shadow-green: 0 4px 16px rgba(30,92,53,0.18), 0 1px 4px rgba(30,92,53,0.1);
+  --shadow-amber: 0 4px 16px rgba(186,117,23,0.16), 0 1px 4px rgba(186,117,23,0.08);
+  --shadow-red:   0 4px 16px rgba(192,57,43,0.16), 0 1px 4px rgba(192,57,43,0.08);
+  --shadow-blue:  0 4px 16px rgba(24,95,165,0.14), 0 1px 4px rgba(24,95,165,0.07);
+
+  /* Radios */
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-card: 18px;
+  --radius-btn:  12px;
+  --radius-pill: 100px;
+
+  /* Transiciones */
+  --transition-base:   all 0.2s cubic-bezier(0.22,1,0.36,1);
+  --transition-quick:  all 0.14s ease;
+  --transition-slow:   all 0.38s cubic-bezier(0.22,1,0.36,1);
 
   /* Tipografía (variables de Next Font se mantienen como fallback) */
   --font-body:    var(--font-dm-sans, 'DM Sans'), system-ui, -apple-system, sans-serif;
@@ -63,6 +82,7 @@
 html {
   height: 100%;
   scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 html, body {
@@ -98,6 +118,15 @@ a {
   text-decoration: none;
 }
 
+/* ─── Micro-separadores globales ─────────────────────────────────────── */
+.section-sep {
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green-500), var(--green-400));
+  border-radius: var(--radius-pill);
+  margin: 20px 0;
+}
+
 /* ─── Animaciones globales ───────────────────────────────────────────── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
@@ -131,4 +160,24 @@ a {
 @keyframes modalIn {
   from { opacity: 0; transform: scale(0.94) translateY(20px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(220%) skewX(-15deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ringPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(29,158,117,0.35); }
+  50%       { box-shadow: 0 0 0 10px rgba(29,158,117,0); }
 }

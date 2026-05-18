@@ -1,10 +1,10 @@
-/* ─── Loading Screen ─────────────────────────────────────────────────── */
+/* ─── Loading Screen premium ─────────────────────────────────────────── */
 .stage {
-  background: var(--paper);
-  border-radius: 24px;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-lg);
-  padding: 56px 32px;
+  background: radial-gradient(ellipse 90% 80% at 50% 0%, rgba(29,158,117,0.07) 0%, var(--paper) 65%);
+  border-radius: var(--radius-card);
+  border: 1px solid rgba(29,158,117,0.12);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.6) inset;
+  padding: 60px 32px;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -17,18 +17,40 @@
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent, var(--green-500), transparent);
+  background: linear-gradient(90deg, transparent 0%, var(--green-400) 40%, var(--green-500) 60%, transparent 100%);
   animation: scanLine 2s linear infinite;
+}
+
+/* Círculo decorativo de fondo */
+.stage::after {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(29,158,117,0.06) 0%, transparent 65%);
+  pointer-events: none;
 }
 
 .scanLine { display: none; }
 
-/* ─── Spinner doble ──────────────────────────────────────────────────── */
+/* ─── Spinner con glow ───────────────────────────────────────────────── */
 .spinner {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 32px;
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 36px;
   position: relative;
+}
+
+/* Glow detrás del spinner */
+.spinner::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(29,158,117,0.15) 0%, transparent 65%);
+  animation: ringPulse 2s ease infinite;
 }
 
 .spinnerRing {
@@ -41,10 +63,10 @@
 }
 
 .spinnerRingInner {
-  inset: 12px;
+  inset: 14px;
   border-color: transparent;
   border-bottom-color: var(--green-700);
-  animation: rotate 0.7s linear infinite reverse;
+  animation: rotate 0.65s linear infinite reverse;
 }
 
 /* ─── Textos ─────────────────────────────────────────────────────────── */
@@ -67,7 +89,7 @@
 
 /* ─── Steps ──────────────────────────────────────────────────────────── */
 .steps {
-  max-width: 380px;
+  max-width: 390px;
   margin: 0 auto;
   text-align: left;
   display: flex;
@@ -80,39 +102,49 @@
   align-items: center;
   gap: 14px;
   padding: 12px 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   margin-bottom: 8px;
-  transition: all 0.4s;
+  transition: var(--transition-slow);
+  transform: scale(1);
 }
 
-.step.done   { background: var(--green-50); }
-.step.active { background: var(--cream-2); }
-.step.pending{ opacity: 0.4; }
+.step.done   {
+  background: var(--green-50);
+  transform: scale(1);
+}
+.step.active {
+  background: var(--cream-2);
+  transform: scale(1.02);
+  box-shadow: 0 2px 12px rgba(29,158,117,0.08), 0 0 0 1.5px rgba(29,158,117,0.15);
+}
+.step.pending{ opacity: 0.35; transform: scale(0.98); }
 
 .stepIcon {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   font-size: 14px;
-  transition: all 0.3s;
+  transition: var(--transition-base);
 }
 
 .stepIcon.done {
-  background: var(--green-500);
+  background: linear-gradient(135deg, var(--green-500) 0%, var(--green-600) 100%);
   color: white;
   font-size: 16px;
   font-weight: 700;
+  box-shadow: 0 2px 8px rgba(29,158,117,0.3);
 }
 
 .stepIcon.active {
-  background: var(--cream);
+  background: var(--paper);
   border: 2px solid var(--green-500);
   color: var(--green-700);
   animation: pulseGlow 1.2s ease infinite;
+  box-shadow: 0 0 0 4px rgba(29,158,117,0.12);
 }
 
 .stepIcon.pending {

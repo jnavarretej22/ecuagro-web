@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import DeleteAnalysisButton from "@/components/delete-analysis-button";
+import ExportPdfButton from "@/components/export-pdf-button";
 import { requireReviewerOrAdminSession } from "@/lib/auth/require-reviewer-or-admin";
 import { prisma } from "@/lib/db/prisma";
 import styles from "../../../../(field)/analisis/[id]/detail.module.css";
@@ -347,6 +348,11 @@ export default async function RevisionAnalisisDetallePage({ params }: Props) {
           )}
         </section>
       ) : null}
+
+      {/* Exportar PDF */}
+      <div className={styles.resetRow}>
+        <ExportPdfButton analysisId={row.id} className={styles.btnExport} />
+      </div>
 
       {isAdmin ? (
         <section className={extra.dangerZone}>

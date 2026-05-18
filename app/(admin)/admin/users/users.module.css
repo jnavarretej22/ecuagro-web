@@ -31,10 +31,11 @@
 
 .card {
   background: #fff;
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   border: 1px solid #e8e6dc;
-  padding: 22px 20px;
-  box-shadow: 0 4px 18px rgba(20, 30, 15, 0.05);
+  padding: 24px 22px;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-base);
 }
 
 .cardTitle {
@@ -75,35 +76,68 @@
 
 .btn {
   margin-top: 6px;
-  padding: 10px 16px;
-  border-radius: 10px;
+  min-height: 42px;
+  padding: 10px 18px;
+  border-radius: var(--radius-btn);
   border: none;
-  background: #1e5c35;
+  background: linear-gradient(135deg, #1e5c35 0%, #2b7d4a 100%);
   color: #fff;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.05px;
   cursor: pointer;
   font-family: inherit;
   width: fit-content;
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-base);
+  box-shadow: var(--shadow-green);
+}
+
+.btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+  transform: translateX(-100%) skewX(-15deg);
+  pointer-events: none;
+}
+
+.btn:hover:not(:disabled)::after {
+  animation: shimmer 0.5s ease forwards;
 }
 
 .btn:hover:not(:disabled) {
-  background: #174a2b;
+  background: linear-gradient(135deg, #174a2b 0%, #1e5c35 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(30,92,53,0.28);
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(30,92,53,0.4);
+  outline-offset: 3px;
 }
 
 .btn:disabled {
-  opacity: 0.65;
+  opacity: 0.55;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .btnGhost {
   background: #fff;
   color: #1e5c35;
-  border: 1px solid #c5d4c8;
+  border: 1.5px solid #c5d4c8;
+  box-shadow: none;
 }
 
 .btnGhost:hover:not(:disabled) {
   background: #f0fdf7;
+  border-color: #1e5c35;
+  box-shadow: 0 2px 8px rgba(30,92,53,0.1);
 }
 
 .error {
@@ -117,9 +151,10 @@
 
 .tableWrap {
   overflow-x: auto;
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   border: 1px solid #e8e6dc;
   background: #fff;
+  box-shadow: var(--shadow-card);
 }
 
 .table {
@@ -130,36 +165,88 @@
 
 .table th,
 .table td {
-  padding: 12px 14px;
+  padding: 13px 16px;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f0f0ec;
 }
 
 .table th {
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  font-weight: 700;
   color: #5c5f55;
-  background: #fafaf8;
+  background: #fafaf7;
+}
+
+/* Fila con hover */
+.table tbody tr {
+  transition: var(--transition-quick);
+}
+
+.table tbody tr:hover {
+  background: rgba(29,158,117,0.04);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .rowMuted {
   color: #7a7d72;
 }
 
-.badge {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 999px;
+/* Avatar circular con iniciales */
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* Colores de avatar por rol */
+.avatarAdmin   { background: linear-gradient(135deg,#fef0db,#f6d9a0); color: #8a5a0a; }
+.avatarField   { background: linear-gradient(135deg,#dcfce7,#bbf7d0); color: #166534; }
+.avatarReviewer{ background: linear-gradient(135deg,#dbeafe,#bfdbfe); color: #1d4ed8; }
+
+/* Badges de rol mejorados */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
   background: #f0fdf7;
   color: #166534;
+  border: 1px solid rgba(22,101,52,0.15);
 }
+
+.badgeAdmin    { background: #fef0db; color: #8a5a0a; border-color: rgba(138,90,10,0.18); }
+.badgeField    { background: #dcfce7; color: #166534; border-color: rgba(22,101,52,0.18); }
+.badgeReviewer { background: #dbeafe; color: #1d4ed8; border-color: rgba(29,78,216,0.18); }
 
 .badgeOff {
   background: #fef2f2;
   color: #991b1b;
+  border-color: rgba(153,27,27,0.15);
 }
 
 .details {

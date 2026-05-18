@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { requireFieldOrAdminSession } from "@/lib/auth/require-field-or-admin";
+import ExportPdfButton from "@/components/export-pdf-button";
 import { prisma } from "@/lib/db/prisma";
 import styles from "./detail.module.css";
 
@@ -356,8 +357,9 @@ export default async function AnalisisDetallePage({ params }: Props) {
         </section>
       ) : null}
 
-      {/* Botones adicionales (Reset) */}
+      {/* Botones adicionales */}
       <div className={styles.resetRow}>
+        <ExportPdfButton analysisId={row.id} className={styles.btnExport} />
         <Link href="/analisis/nuevo" className={styles.btnTertiary}>
           Realizar otro análisis
         </Link>

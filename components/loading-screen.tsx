@@ -86,7 +86,7 @@ export default function LoadingScreen() {
       {/* Indicador de proveedor */}
       <div className={styles.providerBadge} aria-hidden>
         <span className={styles.providerDot} />
-        <span>Analizando con motor IA Groq…</span>
+        <span>Motor de IA procesando imagen…</span>
       </div>
     </div>
   );

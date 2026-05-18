@@ -24,6 +24,26 @@ const roleLabel: Record<Role, string> = {
   REVIEWER: "Revisor",
 };
 
+const roleBadgeClass: Record<Role, string> = {
+  ADMIN: "badgeAdmin",
+  FIELD: "badgeField",
+  REVIEWER: "badgeReviewer",
+};
+
+function getInitials(name: string): string {
+  return name
+    .split(/[\s._-]+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
+const avatarClass: Record<Role, string> = {
+  ADMIN: "avatarAdmin",
+  FIELD: "avatarField",
+  REVIEWER: "avatarReviewer",
+};
+
 /** Evita que `res.json()` rompa el flujo si el servidor devuelve HTML o cuerpo vacío. */
 function parseApiErrorBody(text: string): { error?: string } {
   const t = text.trim();
@@ -279,9 +299,18 @@ export default function UsersClient({
             {users.map((u) => (
               <tr key={u.id}>
                 <td>
-                  <strong>{u.username}</strong>
+                  <div className={styles.userCell}>
+                    <span className={`${styles.avatar} ${styles[avatarClass[u.role]]}`}>
+                      {getInitials(u.username)}
+                    </span>
+                    <strong>{u.username}</strong>
+                  </div>
                 </td>
-                <td>{roleLabel[u.role]}</td>
+                <td>
+                  <span className={`${styles.badge} ${styles[roleBadgeClass[u.role]]}`}>
+                    {roleLabel[u.role]}
+                  </span>
+                </td>
                 <td>
                   <span
                     className={u.active ? styles.badge : `${styles.badge} ${styles.badgeOff}`}

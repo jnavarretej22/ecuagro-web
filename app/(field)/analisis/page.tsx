@@ -64,7 +64,7 @@ export default async function AnalisisListPage({ searchParams }: Props) {
       ) : (
         <ul className={styles.list}>
           {rows.map((r, i) => (
-            <li key={r.id} className={styles.card}>
+            <li key={r.id} className={r.errorMessage ? `${styles.card} ${styles.cardErr}` : styles.card}>
               <Link className={styles.cardLink} href={`/analisis/${r.id}`}>
                 <div className={styles.cardIndex} aria-hidden>
                   {skip + i + 1}
@@ -105,8 +105,8 @@ export default async function AnalisisListPage({ searchParams }: Props) {
           ) : (
             <span className={styles.pageDisabled}>← Anterior</span>
           )}
-          <span className={styles.pageInfo}>
-            Página {page} de {totalPages}
+          <span className={styles.pageCurrent} aria-current="page">
+            {page} / {totalPages}
           </span>
           {page < totalPages ? (
             <Link

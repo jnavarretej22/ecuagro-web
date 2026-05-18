@@ -26,12 +26,20 @@ export default function NuevoAnalisisForm() {
   const [address, setAddress] = useState("");
   const [fieldNotes, setFieldNotes] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (error) errorRef.current?.focus();
   }, [error]);
+
+  // Liberar URL de objeto cuando cambie o se limpie
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -123,16 +131,27 @@ export default function NuevoAnalisisForm() {
           htmlFor="campo-foto"
           aria-label="Subir fotografía del cultivo"
         >
-          <svg className={styles.uploadIcon} viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          {file ? (
-            <>
-              <div className={styles.uploadTitle}>✓ Imagen seleccionada</div>
-              <div className={styles.uploadFileName}>{file.name}</div>
-            </>
+          {previewUrl ? (
+            /* ── Preview de la imagen seleccionada ── */
+            <div className={styles.previewWrap}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={previewUrl}
+                alt="Vista previa de la imagen seleccionada"
+                className={styles.previewImg}
+              />
+              <div className={styles.previewOverlay}>
+                <span className={styles.previewBadge}>✓ Imagen lista</span>
+                <span className={styles.previewName}>{file?.name}</span>
+                <span className={styles.previewHint}>Toca para cambiar la foto</span>
+              </div>
+            </div>
           ) : (
+            /* ── Estado vacío ── */
             <>
+              <svg className={styles.uploadIcon} viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
               <div className={styles.uploadTitle}>Subir fotografía del cultivo</div>
               <div className={styles.uploadSub}>JPG, PNG, WebP · Máximo 10 MB</div>
             </>
@@ -147,6 +166,8 @@ export default function NuevoAnalisisForm() {
             onChange={(ev) => {
               const f = ev.target.files?.[0] ?? null;
               setFile(f);
+              if (previewUrl) URL.revokeObjectURL(previewUrl);
+              setPreviewUrl(f ? URL.createObjectURL(f) : null);
             }}
           />
         </label>
@@ -168,6 +189,8 @@ export default function NuevoAnalisisForm() {
 
         <label className={styles.label} htmlFor="campo-direccion">
           Dirección o referencia de parcela
+        </label>
+        <span className={styles.textareaWrap}>
           <textarea
             id="campo-direccion"
             className={styles.textarea}
@@ -179,11 +202,16 @@ export default function NuevoAnalisisForm() {
             aria-invalid={!!error && !address.trim()}
             aria-required
           />
-        </label>
+          <span className={`${styles.charCounter}${address.length > MAX_ADDRESS_LEN * 0.9 ? address.length >= MAX_ADDRESS_LEN ? ` ${styles.limit}` : ` ${styles.warn}` : ""}`}>
+            {address.length}/{MAX_ADDRESS_LEN}
+          </span>
+        </span>
 
         <label className={styles.label} htmlFor="campo-notas">
           Notas de campo{" "}
           <span style={{ fontWeight: 400, color: "var(--ink-4)" }}>(opcional)</span>
+        </label>
+        <span className={styles.textareaWrap}>
           <textarea
             id="campo-notas"
             className={styles.textarea}
@@ -193,7 +221,10 @@ export default function NuevoAnalisisForm() {
             maxLength={MAX_FIELD_NOTES_LEN}
             rows={3}
           />
-        </label>
+          <span className={`${styles.charCounter}${fieldNotes.length > MAX_FIELD_NOTES_LEN * 0.9 ? fieldNotes.length >= MAX_FIELD_NOTES_LEN ? ` ${styles.limit}` : ` ${styles.warn}` : ""}`}>
+            {fieldNotes.length}/{MAX_FIELD_NOTES_LEN}
+          </span>
+        </span>
 
         {error ? (
           <div
