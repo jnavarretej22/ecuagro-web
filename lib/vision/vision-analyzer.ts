@@ -1,6 +1,6 @@
 import type { VisionAnalyzeInput, VisionAnalyzeResult } from "./types";
 
-export type VisionProviderId = "groq" | "openai";
+export type VisionProviderId = "groq" | "openai" | "gemini";
 
 export interface VisionAnalyzer {
   readonly providerId: VisionProviderId;

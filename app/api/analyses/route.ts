@@ -15,9 +15,9 @@ import { createVisionAnalyzer } from "@/lib/vision/create-vision-analyzer";
 export const runtime = "nodejs";
 export const maxDuration = 120;
 
-const GROQ_MODEL_DEFAULT =
-  "meta-llama/llama-4-scout-17b-16e-instruct";
+const GROQ_MODEL_DEFAULT = "meta-llama/llama-4-scout-17b-16e-instruct";
 const OPENAI_VISION_MODEL_DEFAULT = "gpt-4o";
+const GEMINI_MODEL_DEFAULT = "gemini-2.5-flash-lite";
 
 export async function POST(request: Request) {
   const session = await requireFieldOrAdminSession();
@@ -105,7 +105,9 @@ export async function POST(request: Request) {
   const modelStored =
     analyzer.providerId === "openai"
       ? process.env.OPENAI_VISION_MODEL?.trim() || OPENAI_VISION_MODEL_DEFAULT
-      : process.env.GROQ_MODEL?.trim() || GROQ_MODEL_DEFAULT;
+      : analyzer.providerId === "gemini"
+        ? process.env.GEMINI_MODEL?.trim() || GEMINI_MODEL_DEFAULT
+        : process.env.GROQ_MODEL?.trim() || GROQ_MODEL_DEFAULT;
 
   const analysis = await analyzer.analyze({
     imageBuffer: pre.buffer,

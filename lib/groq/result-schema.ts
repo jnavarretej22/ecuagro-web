@@ -7,6 +7,10 @@ const hallazgoSchema = z
     severidad: z.string(),
     confianza: z.string(),
     descripcion: z.string(),
+    /** v2: recomendación de producto cuando severidad >= Moderada. */
+    productoRecomendado: z.string().optional(),
+    modoAplicacion: z.string().optional(),
+    periodoCarencia: z.string().optional(),
   })
   .passthrough();
 
