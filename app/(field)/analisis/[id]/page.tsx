@@ -17,6 +17,7 @@ interface Hallazgo {
   severidad?: string;
   descripcion?: string;
   nombreCientifico?: string;
+  diagnosticoDiferencial?: string;
 }
 
 interface Pilar {
@@ -30,6 +31,7 @@ interface PlanAccion {
   titulo?: string;
   detalle?: string;
   prioridad?: string;
+  categoria?: string;
 }
 
 interface AnalysisResult {
@@ -45,6 +47,27 @@ interface AnalysisResult {
   accionUrgente?: string;
   diagnosticoIntegrado?: string;
   diagnosticoPrincipal?: string;
+  calidadImagen?: string;
+  calidadImagenNota?: string;
+  estadioFenologico?: string;
+  recomendacionSeguimiento?: string | null;
+}
+
+function getCalidadLabel(c?: string): string | null {
+  if (!c) return null;
+  const v = c.toLowerCase();
+  if (v.includes("excel")) return "Excelente";
+  if (v.includes("acept")) return "Aceptable";
+  if (v.includes("limit")) return "Limitada";
+  if (v.includes("insuf")) return "Insuficiente";
+  return c;
+}
+
+function getEstadioLabel(e?: string): string | null {
+  if (!e) return null;
+  const v = e.toLowerCase();
+  if (v.includes("no determ")) return null;
+  return e.charAt(0).toUpperCase() + e.slice(1);
 }
 
 // Convertidor de clases de severidad
@@ -134,6 +157,25 @@ export default async function AnalisisDetallePage({ params }: Props) {
             {row.provider} · {row.model}
           </dd>
         </div>
+        {parsed && getCalidadLabel(parsed.calidadImagen) ? (
+          <div className={styles.dlItem}>
+            <dt>Calidad de imagen</dt>
+            <dd>
+              {getCalidadLabel(parsed.calidadImagen)}
+              {parsed.calidadImagenNota ? (
+                <span style={{ display: "block", fontSize: 13, color: "var(--ink-3)", fontWeight: 400, marginTop: 4 }}>
+                  {parsed.calidadImagenNota}
+                </span>
+              ) : null}
+            </dd>
+          </div>
+        ) : null}
+        {parsed && getEstadioLabel(parsed.estadioFenologico) ? (
+          <div className={styles.dlItem}>
+            <dt>Estadio fenológico</dt>
+            <dd>{getEstadioLabel(parsed.estadioFenologico)}</dd>
+          </div>
+        ) : null}
       </dl>
 
       {/* Imagen */}
@@ -214,6 +256,12 @@ export default async function AnalisisDetallePage({ params }: Props) {
                               {h.confianza}
                             </div>
                             {h.descripcion && <div style={{ fontSize: 13, marginTop: 8, color: "var(--ink-3)" }}>{h.descripcion}</div>}
+                            {h.diagnosticoDiferencial && (
+                              <div style={{ fontSize: 12, marginTop: 6, padding: "6px 10px", borderRadius: 8, background: "var(--cream, #faf9f5)", border: "1px solid var(--line)", color: "var(--ink-3)" }}>
+                                <strong style={{ color: "var(--ink-2)" }}>Diferencial: </strong>
+                                {h.diagnosticoDiferencial}
+                              </div>
+                            )}
                           </div>
                         ))
                       )}
@@ -249,6 +297,12 @@ export default async function AnalisisDetallePage({ params }: Props) {
                               {h.confianza}
                             </div>
                             {h.descripcion && <div style={{ fontSize: 13, marginTop: 8, color: "var(--ink-3)" }}>{h.descripcion}</div>}
+                            {h.diagnosticoDiferencial && (
+                              <div style={{ fontSize: 12, marginTop: 6, padding: "6px 10px", borderRadius: 8, background: "var(--cream, #faf9f5)", border: "1px solid var(--line)", color: "var(--ink-3)" }}>
+                                <strong style={{ color: "var(--ink-2)" }}>Diferencial: </strong>
+                                {h.diagnosticoDiferencial}
+                              </div>
+                            )}
                           </div>
                         ))
                       )}
@@ -284,6 +338,12 @@ export default async function AnalisisDetallePage({ params }: Props) {
                               {h.confianza}
                             </div>
                             {h.descripcion && <div style={{ fontSize: 13, marginTop: 8, color: "var(--ink-3)" }}>{h.descripcion}</div>}
+                            {h.diagnosticoDiferencial && (
+                              <div style={{ fontSize: 12, marginTop: 6, padding: "6px 10px", borderRadius: 8, background: "var(--cream, #faf9f5)", border: "1px solid var(--line)", color: "var(--ink-3)" }}>
+                                <strong style={{ color: "var(--ink-2)" }}>Diferencial: </strong>
+                                {h.diagnosticoDiferencial}
+                              </div>
+                            )}
                           </div>
                         ))
                       )}
@@ -324,13 +384,32 @@ export default async function AnalisisDetallePage({ params }: Props) {
                         <div key={idx} className={styles.recItem}>
                           <div className={`${styles.recPriority} ${priorityColor}`}>P{priorityText}</div>
                           <div className={styles.recContent}>
-                            <div className={styles.recAction}>{rec.titulo}</div>
+                            <div className={styles.recAction}>
+                              {rec.titulo}
+                              {rec.categoria ? (
+                                <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.6, textTransform: "uppercase", marginLeft: 8, padding: "2px 8px", borderRadius: 999, background: "var(--green-50, #e8f5e9)", color: "var(--green-700)", verticalAlign: "middle" }}>
+                                  {rec.categoria}
+                                </span>
+                              ) : null}
+                            </div>
                             <div className={styles.recTreatment}>{rec.detalle}</div>
                             <div className={styles.recTime}>⏱ {rec.plazo}</div>
                           </div>
                         </div>
                       );
                     })}
+                  </div>
+                </div>
+              )}
+
+              {/* Recomendación de seguimiento (cuando confianza es media/baja) */}
+              {parsed.recomendacionSeguimiento && (
+                <div style={{ margin: "16px 0", padding: "14px 18px", borderRadius: 14, background: "var(--amber-lt, #fff5dc)", border: "1px solid rgba(186,117,23,0.3)", borderLeft: "3px solid var(--amber, #a2640a)" }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase", color: "var(--amber, #a2640a)", marginBottom: 6 }}>
+                    Recomendación de seguimiento
+                  </div>
+                  <div style={{ fontSize: 14, lineHeight: 1.55, color: "var(--ink-2)" }}>
+                    {parsed.recomendacionSeguimiento}
                   </div>
                 </div>
               )}

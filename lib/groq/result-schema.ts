@@ -11,6 +11,8 @@ const hallazgoSchema = z
     productoRecomendado: z.string().optional(),
     modoAplicacion: z.string().optional(),
     periodoCarencia: z.string().optional(),
+    /** v4: hipótesis alternativa cuando confianza es media/baja. */
+    diagnosticoDiferencial: z.string().optional(),
   })
   .passthrough();
 
@@ -19,6 +21,17 @@ const pilarSchema = z
     hallazgos: z.array(hallazgoSchema).default([]),
     sinHallazgos: z.boolean(),
     nota: z.string().optional().default(""),
+  })
+  .passthrough();
+
+const planAccionSchema = z
+  .object({
+    prioridad: z.string(),
+    titulo: z.string(),
+    detalle: z.string(),
+    plazo: z.string(),
+    /** v4: categoría MIP — cultural / biológico / químico / monitoreo / regulatorio. */
+    categoria: z.string().optional(),
   })
   .passthrough();
 
@@ -36,17 +49,13 @@ export const diagnosticoResultSchema = z
     }),
     diagnosticoIntegrado: z.string(),
     accionUrgente: z.union([z.string(), z.null()]).optional(),
-    planAccion: z.array(
-      z
-        .object({
-          prioridad: z.string(),
-          titulo: z.string(),
-          detalle: z.string(),
-          plazo: z.string(),
-        })
-        .passthrough(),
-    ),
+    planAccion: z.array(planAccionSchema),
     disclaimer: z.string(),
+    /** v4: nuevos campos opcionales para retro-compatibilidad con análisis previos. */
+    calidadImagen: z.string().optional(),
+    calidadImagenNota: z.string().optional(),
+    estadioFenologico: z.string().optional(),
+    recomendacionSeguimiento: z.union([z.string(), z.null()]).optional(),
   })
   .passthrough();
 
